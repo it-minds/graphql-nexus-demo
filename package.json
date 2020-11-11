@@ -1,0 +1,38 @@
+{
+  "name": "graphql-nexus-demo",
+  "version": "0.0.1",
+  "description": "A project demonstrating usage of nexusjs, typescript, dataloader, prisma, dependency injection and authorization.",
+  "main": "index.js",
+  "scripts": {
+    "start": "yarn ts-node ./src/server",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "yarn prisma generate"
+  },
+  "keywords": [
+    "Nexus",
+    "TypeScript",
+    "DataLoader",
+    "Prisma",
+    "Authorization",
+    "Dependency",
+    "Injection",
+    "demo"
+  ],
+  "author": "Jonas Antvorskov",
+  "license": "MIT",
+  "devDependencies": {
+    "@prisma/cli": "^2.10.2",
+    "@types/jsonwebtoken": "^8.5.0",
+    "@types/luxon": "^1.25.0",
+    "@types/node": "^14.14.6",
+    "typescript": "^4.0.5"
+  },
+  "dependencies": {
+    "@nexus/schema": "^0.17.0",
+    "@prisma/client": "^2.10.2",
+    "dataloader": "^2.0.0",
+    "graphql-yoga": "^1.18.3",
+    "jsonwebtoken": "^8.5.1",
+    "ts-node": "^9.0.0"
+  }
+}
