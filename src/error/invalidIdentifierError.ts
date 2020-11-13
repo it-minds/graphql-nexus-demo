@@ -1,10 +1,10 @@
-export class InvalidIdentifierError extends Error {
-  readonly kind = "InvalidIdentifierError" as const;
-
+export class InvalidIdentifierError {
+  readonly __typename = 'InvalidIdentifierError' as const;
+  readonly message: string;
   readonly id: string;
 
   constructor(id: string) {
-    super(`Invalid identifier "${id}"`);
+    this.message = `Invalid identifier "${id}"`;
     this.id = id;
   }
 }

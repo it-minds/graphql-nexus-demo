@@ -1,4 +1,4 @@
-import { RootTypingImport } from "@nexus/schema/dist/core";
+import { RootTypingImport } from '@nexus/schema/dist/core';
 
 export class GraphQLErrorDataModel extends Error {
   constructor(message?: string) {
@@ -9,7 +9,7 @@ export class GraphQLErrorDataModel extends Error {
 export type ErrorRootType = Error;
 
 export const graphQLErrorRootTypingImport: RootTypingImport = {
-  name: "ErrorRootType",
+  name: 'ErrorRootType',
   path: __filename,
-  alias: "Error",
+  alias: 'Error',
 };

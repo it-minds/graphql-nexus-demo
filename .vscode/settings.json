@@ -1,11 +1,13 @@
 {
   "[typescript]": {
     "editor.tabSize": 2,
-    "editor.detectIndentation": false
+    "editor.detectIndentation": false,
+    "editor.formatOnSave": true
   },
   "[json]": {
     "editor.tabSize": 2,
     "editor.detectIndentation": false,
+    "editor.formatOnSave": true,
     "editor.quickSuggestions": {
       "strings": true
     },

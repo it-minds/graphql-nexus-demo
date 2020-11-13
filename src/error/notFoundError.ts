@@ -1,10 +1,10 @@
-export class NotFoundError extends Error {
-  readonly kind = "NotFoundError" as const;
-
+export class NotFoundError {
+  readonly __typename = 'NotFoundError' as const;
+  readonly message: string;
   readonly id: string;
 
   constructor(id: string) {
-    super(`Entity with id "${id}" not found.`);
+    this.message = `Entity with id "${id}" not found.`;
     this.id = id;
   }
 }

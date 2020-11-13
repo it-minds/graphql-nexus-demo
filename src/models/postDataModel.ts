@@ -1,7 +1,8 @@
-import { RootTypingImport } from "@nexus/schema/dist/core";
-import { DateTime } from "luxon";
+import { RootTypingImport } from '@nexus/schema/dist/core';
+import { DateTime } from 'luxon';
 
 export interface PostDataModel {
+  __typename: 'Post';
   id: string;
   createdAt: DateTime;
   title: string;
@@ -11,6 +12,6 @@ export interface PostDataModel {
 }
 
 export const postDataModelRootTypingImport: RootTypingImport = {
-  name: "PostDataModel",
+  name: 'PostDataModel',
   path: __filename,
 };

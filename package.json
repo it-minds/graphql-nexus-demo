@@ -6,7 +6,8 @@
   "scripts": {
     "start": "yarn ts-node ./src/server",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "yarn prisma generate"
+    "postinstall": "yarn prisma generate && yarn generate",
+    "generate": "yarn ts-node ./src/server --nexus-exit --disableExit"
   },
   "keywords": [
     "Nexus",
@@ -31,8 +32,11 @@
     "@nexus/schema": "^0.17.0",
     "@prisma/client": "^2.10.2",
     "dataloader": "^2.0.0",
+    "dotenv": "^8.2.0",
+    "graphql": "^15.4.0",
     "graphql-yoga": "^1.18.3",
     "jsonwebtoken": "^8.5.1",
+    "luxon": "^1.25.0",
     "ts-node": "^9.0.0"
   }
 }

@@ -1,4 +1,4 @@
-import { AsyncResult } from "./asyncResult";
+import { AsyncResult } from './asyncResult';
 
 export class Result<T, E> {
   private readonly _isOk: boolean;
@@ -11,7 +11,7 @@ export class Result<T, E> {
     this._error = error;
   }
 
-  static ok<T, E = never>(result: T): Result<T, E> {
+  static ok<T = never, E = never>(result?: T): Result<T, E> {
     return new Result<T, E>(true, result, undefined);
   }
 
@@ -29,31 +29,23 @@ export class Result<T, E> {
 
   get ok(): T {
     if (!this._isOk) {
-      throw new Error("Attempted to retrieve ok value from error Result");
+      throw new Error('Attempted to retrieve ok value from error Result');
     }
     return this._ok as T;
   }
 
   get error(): E {
     if (this._isOk) {
-      throw new Error("Attempted to retrieve error value from ok Result");
+      throw new Error('Attempted to retrieve error value from ok Result');
     }
     return this._error as E;
   }
 
   andThen<T2, E2>(f: (value: T) => Result<T2, E2>): Result<T2, E | E2> {
-    return this._isOk
-      ? f(this._ok as T)
-      : ((this as unknown) as Result<T2, E | E2>);
+    return this._isOk ? f(this._ok as T) : ((this as unknown) as Result<T2, E | E2>);
   }
 
-  andThenAsync<T2, E2>(
-    f: (value: T) => PromiseLike<Result<T2, E2>>
-  ): AsyncResult<T2, E | E2> {
-    return AsyncResult.from(
-      this._isOk
-        ? f(this._ok as T)
-        : Promise.resolve((this as unknown) as Result<T2, E | E2>)
-    );
+  andThenAsync<T2, E2>(f: (value: T) => PromiseLike<Result<T2, E2>>): AsyncResult<T2, E | E2> {
+    return AsyncResult.from(this._isOk ? f(this._ok as T) : Promise.resolve((this as unknown) as Result<T2, E | E2>));
   }
 }

@@ -1,12 +1,13 @@
-import { Post, PrismaClient } from "@prisma/client";
-import DataLoader from "dataloader";
-import { DateTime } from "luxon";
-import { InvalidIdentifierError } from "../../error/invalidIdentifierError";
-import { NotFoundError } from "../../error/notFoundError";
-import { PostDataModel } from "../../models/postDataModel";
-import { AsyncResult } from "../../result/asyncResult";
-import { Result } from "../../result/result";
-import { IdentifierService } from "../identifier/identifierService";
+import { Post, PrismaClient } from '@prisma/client';
+import DataLoader from 'dataloader';
+import { DateTime } from 'luxon';
+import { InvalidIdentifierError } from '../../error/invalidIdentifierError';
+import { NotFoundError } from '../../error/notFoundError';
+import { PostDataModel } from '../../models/postDataModel';
+import { AsyncResult } from '../../result/asyncResult';
+import { Result } from '../../result/result';
+import { Identifier } from '../identifier/identifier';
+import { IdentifierService } from '../identifier/identifierService';
 
 export class PostsService {
   private posts: DataLoader<number, Result<PostDataModel, NotFoundError>>;
@@ -14,11 +15,7 @@ export class PostsService {
   private prisma: PrismaClient;
   private now: DateTime;
 
-  constructor(
-    prisma: PrismaClient,
-    identifierService: IdentifierService,
-    now: DateTime
-  ) {
+  constructor(prisma: PrismaClient, identifierService: IdentifierService, now: DateTime) {
     this.posts = new DataLoader(async (keys) => {
       const posts = await prisma.post.findMany({
         where: { id: { in: [...keys] } },
@@ -36,9 +33,7 @@ export class PostsService {
         const post = posts.find((post) => post.id === key);
         return post
           ? Result.ok(this.transformPost(post))
-          : Result.error(
-              new NotFoundError(this.identifierService.post.create(key))
-            );
+          : Result.error(new NotFoundError(this.identifierService.post.create(key)));
       });
     });
     this.prisma = prisma;
@@ -46,12 +41,8 @@ export class PostsService {
     this.now = now;
   }
 
-  getPostById(
-    id: string
-  ): AsyncResult<PostDataModel, NotFoundError | InvalidIdentifierError> {
-    return this.identifierService.post
-      .parse(id)
-      .andThenAsync((id) => this.posts.load(id));
+  getPostById(id: string): AsyncResult<PostDataModel, NotFoundError | InvalidIdentifierError> {
+    return this.identifierService.post.parse(id).andThenAsync((id) => this.posts.load(id.value));
   }
 
   create({
@@ -63,41 +54,40 @@ export class PostsService {
     title: string;
     content: string;
     published: boolean;
-    authorId: string;
-  }): AsyncResult<{ post: PostDataModel }, InvalidIdentifierError> {
+    authorId: Identifier<'User'>;
+  }): AsyncResult<{ __typename: 'CreatePost'; post: PostDataModel }, never> {
     return AsyncResult.from(
-      this.identifierService.user.parse(authorId).andThenAsync((authorId) =>
-        this.prisma.post
-          .create({
-            data: {
-              title,
-              content,
-              author: { connect: { id: authorId } },
-              published,
-              createdAt: this.now.toISO(),
-              slug: title, // TODO: fix
-            },
-            select: {
-              id: true,
-              createdAt: true,
-              title: true,
-              content: true,
-              published: true,
-              authorId: true,
-              slug: true,
-            },
-          })
-          .then((post) => {
-            const transformedPost = this.transformPost(post);
-            this.posts.prime(post.id, Result.ok(transformedPost));
-            return Result.ok({ post: transformedPost });
-          })
-      )
+      this.prisma.post
+        .create({
+          data: {
+            title,
+            content,
+            author: { connect: { id: authorId.value } },
+            published,
+            createdAt: this.now.toISO(),
+            slug: title, // TODO: fix
+          },
+          select: {
+            id: true,
+            createdAt: true,
+            title: true,
+            content: true,
+            published: true,
+            authorId: true,
+            slug: true,
+          },
+        })
+        .then((post) => {
+          const transformedPost = this.transformPost(post);
+          this.posts.prime(post.id, Result.ok(transformedPost));
+          return Result.ok({ __typename: 'CreatePost', post: transformedPost });
+        }),
     );
   }
 
   private transformPost(post: Post): PostDataModel {
     return {
+      __typename: 'Post',
       id: this.identifierService.post.create(post.id),
       content: post.content,
       createdAt: DateTime.fromJSDate(post.createdAt),

@@ -1,12 +1,12 @@
-import { objectType } from "@nexus/schema";
-import { postDataModelRootTypingImport } from "../../../models/postDataModel";
+import { objectType } from '@nexus/schema';
+import { postDataModelRootTypingImport } from '../../../models/postDataModel';
 
 export const Post = objectType({
-  name: "Post",
+  name: 'Post',
   rootTyping: postDataModelRootTypingImport,
   definition(t) {
-    t.string("title", {
-      description: "The title of the post",
+    t.string('title', {
+      description: 'The title of the post',
     });
   },
 });

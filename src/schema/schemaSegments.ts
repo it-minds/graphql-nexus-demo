@@ -1,3 +1,4 @@
-import { PostSchema } from "./post/schema";
+import { ErrorSchema } from './error/schema';
+import { PostSchema } from './post/schema';
 
-export const schemaSegments = [PostSchema];
+export const schemaSegments = [PostSchema, ErrorSchema];

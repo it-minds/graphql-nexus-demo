@@ -1,13 +1,13 @@
-export class Identifier {
-  readonly prefix: string;
-  readonly id: number;
+export class Identifier<Prefix extends string> {
+  readonly prefix: Prefix;
+  readonly value: number;
 
-  constructor(prefix: string, id: number) {
+  constructor(prefix: Prefix, id: number) {
     this.prefix = prefix;
-    this.id = id;
+    this.value = id;
   }
 
   toString(): string {
-    return `${this.prefix}/${this.id}`;
+    return `${this.prefix}/${this.value}`;
   }
 }
