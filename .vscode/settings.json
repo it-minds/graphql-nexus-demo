@@ -12,5 +12,6 @@
       "strings": true
     },
     "editor.suggest.insertMode": "replace"
-  }
+  },
+  "typescript.tsdk": "node_modules\\typescript\\lib"
 }
