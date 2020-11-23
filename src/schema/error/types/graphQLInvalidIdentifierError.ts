@@ -7,7 +7,7 @@ export const GraphQLInvalidIdentifierError = objectType({
   rootTyping: { name: 'GraphQLInvalidIdentifierErrorRoot', path: __filename },
   definition(t) {
     t.implements(GraphQLError);
-    t.id('id', (error) => error.id);
+    t.id('id', { resolve: (error) => error.id, nullable: false });
   },
 });
 

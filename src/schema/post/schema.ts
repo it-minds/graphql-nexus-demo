@@ -7,6 +7,8 @@ import { CreatePost } from './types/createPost';
 import { CreatePostResponse } from './types/createPostResponse';
 import { Post } from './types/post';
 import { PostResponse } from './types/postResponse';
+import { PostResponseConnection, PostResponseConnectionEdge } from './types/postsConnection';
+import { PostsConnectionResponse } from './types/postsConnectionResponse';
 
 export const PostSchema = schemaSegmentDeclaration({
   query: (t) => {
@@ -16,7 +18,7 @@ export const PostSchema = schemaSegmentDeclaration({
       args: {
         id: idArg({ required: true }),
       },
-      resolve: (root, { id }, ctx) => ctx.posts.getPostById(id).collect(),
+      resolve: (_, { id }, ctx) => ctx.posts.getPostById(id).collect(),
     });
   },
   mutation: (t) => {
@@ -39,7 +41,7 @@ export const PostSchema = schemaSegmentDeclaration({
       },
       description: 'Creates a new post, authored by the current user.',
       nullable: false,
-      resolve: authorizedIf(isAdmin, (root, { title, content, published }, ctx) =>
+      resolve: authorizedIf(isAdmin, (_, { title, content, published }, ctx) =>
         ctx.authorization.currentIdentity.andThenAsync((identity: AuthorizationIdentity) =>
           ctx.posts.create({
             title,
@@ -51,5 +53,13 @@ export const PostSchema = schemaSegmentDeclaration({
       ),
     });
   },
-  types: [Post, PostResponse, CreatePost, CreatePostResponse],
+  types: [
+    Post,
+    PostResponse,
+    CreatePost,
+    CreatePostResponse,
+    PostResponseConnection,
+    PostResponseConnectionEdge,
+    PostsConnectionResponse,
+  ],
 });

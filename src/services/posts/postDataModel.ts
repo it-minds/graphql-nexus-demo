@@ -9,6 +9,7 @@ export interface PostDataModel {
   content: string;
   published: boolean;
   authorId: string;
+  slug: string;
 }
 
 export const postDataModelRootTypingImport: RootTypingImport = {

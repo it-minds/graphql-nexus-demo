@@ -1,5 +1,5 @@
 import { objectType } from '@nexus/schema';
-import { PostDataModel } from '../../../models/postDataModel';
+import { PostDataModel } from '../../../services/posts/postDataModel';
 import { Post } from './post';
 
 export const CreatePost = objectType({
@@ -10,7 +10,7 @@ export const CreatePost = objectType({
       type: Post,
       description: 'The newly created post',
       nullable: false,
-      resolve: (root, args, ctx) => root.post,
+      resolve: (root) => root.post,
     });
   },
 });

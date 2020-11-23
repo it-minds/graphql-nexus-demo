@@ -3,7 +3,7 @@ import DataLoader from 'dataloader';
 import { DateTime } from 'luxon';
 import { InvalidIdentifierError } from '../../error/invalidIdentifierError';
 import { NotFoundError } from '../../error/notFoundError';
-import { PostDataModel } from '../../models/postDataModel';
+import { PostDataModel } from './postDataModel';
 import { AsyncResult } from '../../result/asyncResult';
 import { Result } from '../../result/result';
 import { Identifier } from '../identifier/identifier';
@@ -11,6 +11,7 @@ import { IdentifierService } from '../identifier/identifierService';
 
 export class PostsService {
   private posts: DataLoader<number, Result<PostDataModel, NotFoundError>>;
+  private postsByAuthorId: DataLoader<number, Result<PostDataModel[], never>>;
   private identifierService: IdentifierService;
   private prisma: PrismaClient;
   private now: DateTime;
@@ -36,13 +37,42 @@ export class PostsService {
           : Result.error(new NotFoundError(this.identifierService.post.create(key)));
       });
     });
+    this.postsByAuthorId = new DataLoader(async (authorIds) => {
+      const posts = await prisma.post.findMany({
+        where: { authorId: { in: [...authorIds] } },
+        select: {
+          id: true,
+          createdAt: true,
+          title: true,
+          content: true,
+          published: true,
+          authorId: true,
+          slug: true,
+        },
+      });
+      return authorIds.map((authorId) =>
+        Result.ok(
+          posts
+            .filter((post) => post.authorId === authorId)
+            .map((postByAuthor) => {
+              const post = this.transformPost(postByAuthor);
+              this.posts.prime(postByAuthor.id, Result.ok(post));
+              return post;
+            }),
+        ),
+      );
+    });
     this.prisma = prisma;
     this.identifierService = identifierService;
     this.now = now;
   }
 
   getPostById(id: string): AsyncResult<PostDataModel, NotFoundError | InvalidIdentifierError> {
-    return this.identifierService.post.parse(id).andThenAsync((id) => this.posts.load(id.value));
+    return this.identifierService.post.parse(id).andThenAsync((postId) => this.posts.load(postId.value));
+  }
+
+  getPostByAuthorId(id: string): AsyncResult<PostDataModel[], InvalidIdentifierError> {
+    return this.identifierService.user.parse(id).andThenAsync((authorId) => this.postsByAuthorId.load(authorId.value));
   }
 
   create({
@@ -94,6 +124,7 @@ export class PostsService {
       published: post.published,
       title: post.title,
       authorId: this.identifierService.user.create(post.authorId),
+      slug: post.slug,
     };
   }
 }

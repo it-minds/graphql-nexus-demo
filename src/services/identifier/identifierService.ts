@@ -15,6 +15,7 @@ export class IdentifierService {
   post = new IdentifierClass('Post');
   postComment = new IdentifierClass('PostComment');
   user = new IdentifierClass('User');
+  userProfile = new IdentifierClass('UserProfile');
 }
 
 class IdentifierClass<Prefix extends string> {

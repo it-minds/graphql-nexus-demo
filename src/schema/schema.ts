@@ -1,10 +1,13 @@
 import { makeSchema, mutationType, queryType } from '@nexus/schema';
 import * as path from 'path';
 import { schemaSegments } from './schemaSegments';
+import { scalars } from './scalars';
+import '../generated/typings';
 
 export const schema = makeSchema({
   types: [
     ...schemaSegments.flatMap((segment) => segment.types || []),
+    ...scalars,
     queryType({
       definition(t) {
         for (const segment of schemaSegments) {

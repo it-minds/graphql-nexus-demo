@@ -7,6 +7,8 @@ import { schema } from './schema/schema';
 import { AuthorizationService } from './services/authorization/authorizationService';
 import { IdentifierService } from './services/identifier/identifierService';
 import { PostsService } from './services/posts/postsService';
+import { UserProfileService } from './services/userProfiles/userProfileService';
+import { UsersService } from './services/users/userService';
 
 const config = prepareConfig();
 
@@ -20,6 +22,8 @@ const server = new GraphQLServer({
     return {
       authorization: new AuthorizationService(authorizationToken, now, config.jwtSecret, identifierService),
       posts: new PostsService(prisma, identifierService, now),
+      users: new UsersService(prisma, identifierService),
+      userProfiles: new UserProfileService(prisma, identifierService),
     };
   },
 });
