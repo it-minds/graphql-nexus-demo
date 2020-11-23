@@ -7,7 +7,7 @@
     "start": "yarn ts-node ./src/server",
     "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "yarn prisma generate && yarn generate",
-    "generate": "yarn ts-node ./src/server --nexus-exit --disableExit"
+    "generate": "yarn ts-node --log-error ./src/server --nexus-exit"
   },
   "keywords": [
     "Nexus",
