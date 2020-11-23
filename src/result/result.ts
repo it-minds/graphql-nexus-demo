@@ -48,4 +48,18 @@ export class Result<T, E> {
   andThenAsync<T2, E2>(f: (value: T) => PromiseLike<Result<T2, E2>>): AsyncResult<T2, E | E2> {
     return AsyncResult.from(this._isOk ? f(this._ok as T) : Promise.resolve((this as unknown) as Result<T2, E | E2>));
   }
+
+  orElse<T2, E2>(f: (error: E) => Result<T2, E2>): Result<T | T2, E2> {
+    return !this._isOk ? f(this._error as E) : ((this as unknown) as Result<T | T2, E2>);
+  }
+
+  orElseAsync<T2, E2>(f: (error: E) => PromiseLike<Result<T2, E2>>): AsyncResult<T | T2, E2> {
+    return AsyncResult.from(
+      !this._isOk ? f(this._error as E) : Promise.resolve((this as unknown) as Result<T | T2, E2>),
+    );
+  }
+
+  collect(): T | E {
+    return this._isOk ? this.ok : this.error;
+  }
 }

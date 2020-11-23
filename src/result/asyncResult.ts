@@ -43,6 +43,22 @@ export class AsyncResult<T, E> implements PromiseLike<Result<T, E>> {
     );
   }
 
+  orElse<T2, E2>(f: (error: E) => Result<T2, E2>): AsyncResult<T | T2, E2> {
+    return AsyncResult.from(
+      this.innerResult.then((result) =>
+        result.isError() ? f(result.error) : ((Result.ok(result.ok) as unknown) as Result<T | T2, E2>),
+      ),
+    );
+  }
+
+  orElseAsync<T2, E2>(f: (error: E) => PromiseLike<Result<T2, E2>>): AsyncResult<T | T2, E2> {
+    return AsyncResult.from(
+      this.innerResult.then((result) =>
+        result.isError() ? f(result.error) : ((Result.ok(result.ok) as unknown) as Result<T | T2, E2>),
+      ),
+    );
+  }
+
   collect(): PromiseLike<T | E> {
     return this.isOk().then<T | E>((result) => (result ? this.ok : this.error));
   }
