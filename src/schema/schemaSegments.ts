@@ -1,4 +1,5 @@
 import {
+  NexusEnumTypeDef,
   NexusExtendTypeDef,
   NexusInterfaceTypeDef,
   NexusObjectTypeDef,
@@ -14,6 +15,7 @@ export const schemaTypes: Array<
   | NexusObjectTypeDef<any>
   | NexusUnionTypeDef<any>
   | NexusInterfaceTypeDef<any>
+  | NexusEnumTypeDef<any>
   | NexusExtendTypeDef<'Mutation'>
   | NexusExtendTypeDef<'Query'>
 > = [connectionTypes, postTypes, errorTypes, userTypes, userProfileTypes].flat();
