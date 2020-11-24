@@ -16,6 +16,5 @@ export const schemaTypes: Array<
   | NexusUnionTypeDef<any>
   | NexusInterfaceTypeDef<any>
   | NexusEnumTypeDef<any>
-  | NexusExtendTypeDef<'Mutation'>
-  | NexusExtendTypeDef<'Query'>
+  | NexusExtendTypeDef<any>
 > = [connectionTypes, postTypes, errorTypes, userTypes, userProfileTypes].flat();
