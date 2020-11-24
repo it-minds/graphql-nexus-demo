@@ -1,7 +1,19 @@
-import { ConnectionSchema } from './connection/schema';
-import { ErrorSchema } from './error/schema';
-import { PostSchema } from './post/schema';
-import { UserSchema } from './user/schema';
-import { UserProfileSchema } from './userProfile/schema';
+import {
+  NexusExtendTypeDef,
+  NexusInterfaceTypeDef,
+  NexusObjectTypeDef,
+  NexusUnionTypeDef,
+} from '@nexus/schema/dist/core';
+import { connectionTypes } from './connection/schema';
+import { errorTypes } from './error/schema';
+import { postTypes } from './post/schema';
+import { userTypes } from './user/schema';
+import { userProfileTypes } from './userProfile/schema';
 
-export const schemaSegments = [ConnectionSchema, PostSchema, ErrorSchema, UserSchema, UserProfileSchema];
+export const schemaTypes: Array<
+  | NexusObjectTypeDef<any>
+  | NexusUnionTypeDef<any>
+  | NexusInterfaceTypeDef<any>
+  | NexusExtendTypeDef<'Mutation'>
+  | NexusExtendTypeDef<'Query'>
+> = [connectionTypes, postTypes, errorTypes, userTypes, userProfileTypes].flat();
