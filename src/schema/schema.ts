@@ -1,6 +1,6 @@
 import { makeSchema } from '@nexus/schema';
 import * as path from 'path';
-import { schemaTypes } from './schemaSegments';
+import { schemaTypes } from './schemaTypes';
 import { scalars } from './scalars';
 import '../generated/typings';
 
