@@ -14,7 +14,7 @@ export const schema = makeSchema({
     sources: [
       {
         source: path.resolve(__dirname, './context.ts'), // this points to where the RequestContext type can be imported from
-        alias: 'ctx', // the alias the module containing the RequestContext type is given in the schema typeings artifact
+        alias: 'ctx', // the alias the module containing the RequestContext type is given in the schema typings artifact
       },
     ],
     contextType: 'ctx.RequestContext', // the path to the RequestContext in the typeings artifact
